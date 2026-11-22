@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Software Engineering Diagrams Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 8px; }
+        p.subtitle { text-align: center; color: #94a3b8; margin-bottom: 24px; }
+        .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .tab-btn { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+        .tab-btn:hover { background: #334155; }
+        .tab-btn.active { background: #0284c7; color: white; border-color: #38bdf8; }
+        .diagram-container { display: none; background: white; color: #0f172a; padding: 24px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); max-width: 1200px; margin: 0 auto; overflow: auto; }
+        .diagram-container.active { display: block; }
+        .diagram-title { font-size: 18px; font-weight: bold; margin-bottom: 16px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Software Engineering Diagrams</h1>
+    <p class="subtitle">Vehicle Service Management and Maintenance Analysis System</p>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab(0)">Use Case Diagram</button>
+        <button class="tab-btn" onclick="showTab(1)">UML Class Diagram</button>
+        <button class="tab-btn" onclick="showTab(2)">System Architecture Diagram</button>
+        <button class="tab-btn" onclick="showTab(3)">DFD Level 0 (Context)</button>
+        <button class="tab-btn" onclick="showTab(4)">DFD Level 1</button>
+        <button class="tab-btn" onclick="showTab(5)">Activity Diagram</button>
+        <button class="tab-btn" onclick="showTab(6)">Sequence Diagram</button>
+    </div>
+    <div id="tab-0" class="diagram-container active">
+        <div class="diagram-title">Use Case Diagram</div>
+        <pre class="mermaid">
+flowchart LR
+    %% Actors
+    Staff(("👤 Staff / Admin"))
+    Customer(("👤 Customer"))
+
+    %% Use Cases
+    UC1["Register Customer"]
+    UC2["Add Vehicle"]
+    UC3["Schedule Appointment"]
+    UC4["Record Service"]
+    UC5["Generate Bill"]
+    UC6["View Reports"]
+    UC7["Analyze Maintenance Costs"]
+    UC8["Search Service History"]
+    UC9["Login / Authenticate"]
+    UC10["Update Customer Info"]
+    UC11["Cancel Appointment"]
+    UC12["Mark Payment"]
+    UC13["Calculate Total Cost"]
+    UC14["Send Notification"]
+
+    %% Staff interactions
+    Staff --- UC1
+    Staff --- UC2
+    Staff --- UC3
+    Staff --- UC4
+    Staff --- UC5
+    Staff --- UC6
+    Staff --- UC7
+    Staff --- UC8
+    Staff --- UC10
+    Staff --- UC12
+
+    %% Customer interactions
+    Customer --- UC3
+    Customer --- UC11
+    Customer --- UC8
+
+    %% Include relationships
+    UC1 -. "<<include>>" .-> UC9
+    UC4 -. "<<include>>" .-> UC13
+    UC5 -. "<<include>>" .-> UC13
+    UC3 -. "<<include>>" .-> UC1
+
+    %% Extend relationships
+    UC3 -. "<<extend>>" .-> UC11
+    UC5 -. "<<extend>>" .-> UC12
+    UC6 -. "<<extend>>" .-> UC7
+    UC5 -. "<<extend>>" .-> UC14
+    UC1 -. "<<extend>>" .-> UC10
+
+    %% Styling
+    style Staff fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style Customer fill:#7B68EE,stroke:#5A4DB0,color:#fff
+    style UC1 fill:#E8F5E9,stroke:#43A047
+    style UC2 fill:#E8F5E9,stroke:#43A047
+    style UC3 fill:#E8F5E9,stroke:#43A047
+    style UC4 fill:#E8F5E9,stroke:#43A047
+    style UC5 fill:#E8F5E9,stroke:#43A047
+    style UC6 fill:#FFF3E0,stroke:#FB8C00
+    style UC7 fill:#FFF3E0,stroke:#FB8C00
+    style UC8 fill:#FFF3E0,stroke:#FB8C00
+    style UC9 fill:#F3E5F5,stroke:#8E24AA
+    style UC10 fill:#F3E5F5,stroke:#8E24AA
+    style UC11 fill:#F3E5F5,stroke:#8E24AA
+    style UC12 fill:#F3E5F5,stroke:#8E24AA
+    style UC13 fill:#F3E5F5,stroke:#8E24AA
+    style UC14 fill:#F3E5F5,stroke:#8E24AA
+        </pre>
+    </div>
+    <div id="tab-1" class="diagram-container">
+        <div class="diagram-title">UML Class Diagram</div>
+        <pre class="mermaid">
+classDiagram
+    class Customer {
+        -int customerId
+        -String name
+        -String phone
+        -String email
+        -String address
+        -Date createdAt
+        +addCustomer() boolean
+        +searchCustomer(id: int) Customer
+        +updateCustomer() boolean
+        +deleteCustomer(id: int) boolean
+        +getAllCustomers() List~Customer~
+        +toString() String
+    }
+
+    class Vehicle {
+        -int vehicleId
+        -int customerId
+        -String registrationNumber
+        -String brand
+        -String model
+        -String vehicleType
+        -int year
+        +addVehicle() boolean
+        +getVehiclesByCustomer(customerId: int) List~Vehicle~
+        +searchByRegNumber(regNo: String) Vehicle
+        +updateVehicle() boolean
+        +getAllVehicles() List~Vehicle~
+        +toString() String
+    }
+
+    class Appointment {
+        -int appointmentId
+        -int customerId
+        -int vehicleId
+        -Date appointmentDate
+        -String issueDescription
+        -String status
+        +bookAppointment() boolean
+        +cancelAppointment(id: int) boolean
+        +updateStatus(id: int, status: String) boolean
+        +getAppointmentsByDate(date: Date) List~Appointment~
+        +getAppointmentsByCustomer(customerId: int) List~Appointment~
+        +getAllAppointments() List~Appointment~
+        +toString() String
+    }
+
+    class ServiceRecord {
+        -int serviceId
+        -int appointmentId
+        -int vehicleId
+        -Date serviceDate
+        -String description
+        -double laborCost
+        -double partsCost
+        -double totalCost
+        -Date nextServiceDate
+        +createRecord() boolean
+        +calculateTotal() double
+        +getHistory(vehicleId: int) List~ServiceRecord~
+        +getServicesByMonth(month: int, year: int) List~ServiceRecord~
+        +getMostExpensiveService() ServiceRecord
+        +getAllRecords() List~ServiceRecord~
+        +toString() String
+    }
+
+    class Bill {
+        -int billId
+        -int serviceId
+        -Date billDate
+        -double amount
+        -String paymentStatus
+        -String paymentMethod
+        +generateBill() boolean
+        +markPaid(id: int, method: String) boolean
+        +getPendingBills() List~Bill~
+        +getBillByServiceId(serviceId: int) Bill
+        +getAllBills() List~Bill~
+        +getTotalRevenue() double
+        +toString() String
+    }
+
+    %% Relationships with cardinalities
+    Customer "1" --> "0..*" Vehicle : owns
+    Customer "1" --> "0..*" Appointment : books
+    Vehicle "1" --> "0..*" Appointment : scheduled for
+    Vehicle "1" --> "0..*" ServiceRecord : has
+    Appointment "1" --> "0..1" ServiceRecord : results in
+    ServiceRecord "1" --> "1" Bill : generates
+        </pre>
+    </div>
+    <div id="tab-2" class="diagram-container">
+        <div class="diagram-title">System Architecture Diagram</div>
+        <pre class="mermaid">
+flowchart TD
+    subgraph PL["🖥️ Presentation Layer"]
+        direction LR
+        UI["Java Console UI\n(Scanner / System.out)"]
+        Menu["Menu-Driven Interface"]
+        UI <--> Menu
+    end
+
+    subgraph BLL["⚙️ Business Logic Layer"]
+        direction LR
+        CM["CustomerManager"]
+        VM["VehicleManager"]
+        AM["AppointmentManager"]
+        SM["ServiceRecordManager"]
+        BM["BillingManager"]
+        RM["ReportManager"]
+    end
+
+    subgraph DAL["🔌 Data Access Layer"]
+        direction LR
+        JDBC["JDBC Driver\n(mysql-connector-java)"]
+        ConnPool["Connection Manager\n(DB Config)"]
+        JDBC <--> ConnPool
+    end
+
+    subgraph DB["🗄️ Database Layer"]
+        direction LR
+        MySQL["MySQL Server\n(VehicleServiceDB)"]
+        T1[("Customer")]
+        T2[("Vehicle")]
+        T3[("Appointment")]
+        T4[("Service_Record")]
+        T5[("Bill")]
+        MySQL --- T1
+        MySQL --- T2
+        MySQL --- T3
+        MySQL --- T4
+        MySQL --- T5
+    end
+
+    subgraph PAM["🐍 Python Analysis Module"]
+        direction LR
+        PA["vehicle_service_analysis.py"]
+        Libs["pandas / matplotlib\nseaborn / numpy"]
+        Output["Charts & Reports\n(PNG Output)"]
+        PA <--> Libs
+        PA --> Output
+    end
+
+    %% Data flows between layers
+    PL -- "User Input\n(menu selections, data entry)" --> BLL
+    BLL -- "Formatted Output\n(tables, messages)" --> PL
+
+    BLL -- "SQL Queries\n(CRUD Operations)" --> DAL
+    DAL -- "ResultSet Data\n(query results)" --> BLL
+
+    DAL -- "SQL Statements\n(via JDBC)" --> DB
+    DB -- "Query Results\n(rows, metadata)" --> DAL
+
+    PAM -- "SQL Queries\n(via mysql.connector)" --> DB
+    DB -- "Raw Data\n(for analysis)" --> PAM
+
+    %% Styling
+    style PL fill:#E3F2FD,stroke:#1565C0,stroke-width:2px
+    style BLL fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style DAL fill:#FFF3E0,stroke:#E65100,stroke-width:2px
+    style DB fill:#FCE4EC,stroke:#C62828,stroke-width:2px
+    style PAM fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px
+
+    style UI fill:#BBDEFB,stroke:#1565C0
+    style Menu fill:#BBDEFB,stroke:#1565C0
+    style CM fill:#C8E6C9,stroke:#2E7D32
+    style VM fill:#C8E6C9,stroke:#2E7D32
+    style AM fill:#C8E6C9,stroke:#2E7D32
+    style SM fill:#C8E6C9,stroke:#2E7D32
+    style BM fill:#C8E6C9,stroke:#2E7D32
+    style RM fill:#C8E6C9,stroke:#2E7D32
+    style JDBC fill:#FFE0B2,stroke:#E65100
+    style ConnPool fill:#FFE0B2,stroke:#E65100
+    style MySQL fill:#F8BBD0,stroke:#C62828
+    style T1 fill:#F8BBD0,stroke:#C62828
+    style T2 fill:#F8BBD0,stroke:#C62828
+    style T3 fill:#F8BBD0,stroke:#C62828
+    style T4 fill:#F8BBD0,stroke:#C62828
+    style T5 fill:#F8BBD0,stroke:#C62828
+    style PA fill:#E1BEE7,stroke:#6A1B9A
+    style Libs fill:#E1BEE7,stroke:#6A1B9A
+    style Output fill:#E1BEE7,stroke:#6A1B9A
+        </pre>
+    </div>
+    <div id="tab-3" class="diagram-container">
+        <div class="diagram-title">DFD Level 0 (Context)</div>
+        <pre class="mermaid">
+flowchart LR
+    %% External Entities
+    Staff(["👤 Staff / Admin"])
+    Customer(["👤 Customer"])
+    Management(["👤 Management"])
+
+    %% Central Process
+    VSMS[["P0: Vehicle Service\nManagement System"]]
+
+    %% Data flows from Staff to System
+    Staff -- "Customer Details\n(name, phone, email, address)" --> VSMS
+    Staff -- "Vehicle Information\n(reg. number, brand, model, year)" --> VSMS
+    Staff -- "Service Details\n(description, labor cost, parts cost)" --> VSMS
+    Staff -- "Payment Information\n(payment method, status)" --> VSMS
+
+    %% Data flows from System to Staff
+    VSMS -- "Appointment Confirmations" --> Staff
+    VSMS -- "Service Records" --> Staff
+    VSMS -- "Generated Bills" --> Staff
+    VSMS -- "Search Results" --> Staff
+
+    %% Data flows from Customer to System
+    Customer -- "Appointment Requests\n(date, issue description)" --> VSMS
+    Customer -- "Cancellation Requests" --> VSMS
+    Customer -- "Service History Queries" --> VSMS
+
+    %% Data flows from System to Customer
+    VSMS -- "Appointment Status" --> Customer
+    VSMS -- "Service History Reports" --> Customer
+    VSMS -- "Bills & Invoices" --> Customer
+
+    %% Data flows from System to Management
+    VSMS -- "Analysis Reports\n(cost trends, charts)" --> Management
+    VSMS -- "Revenue Reports" --> Management
+    VSMS -- "Workload Statistics\n(monthly service counts)" --> Management
+
+    %% Data flows from Management to System
+    Management -- "Report Requests\n(date range, filters)" --> VSMS
+
+    %% Styling
+    style Staff fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style Customer fill:#7B68EE,stroke:#5A4DB0,color:#fff
+    style Management fill:#FF8C42,stroke:#CC6B30,color:#fff
+    style VSMS fill:#2E7D32,stroke:#1B5E20,color:#fff,stroke-width:3px
+        </pre>
+    </div>
+    <div id="tab-4" class="diagram-container">
+        <div class="diagram-title">DFD Level 1</div>
+        <pre class="mermaid">
+flowchart TD
+    %% External Entities
+    Staff(["👤 Staff / Admin"])
+    Customer(["👤 Customer"])
+    Management(["👤 Management"])
+
+    %% Processes
+    P1["P1: Manage\nCustomers"]
+    P2["P2: Manage\nVehicles"]
+    P3["P3: Schedule\nAppointments"]
+    P4["P4: Record\nServices"]
+    P5["P5: Generate\nBills"]
+    P6["P6: Generate\nReports"]
+
+    %% Data Stores
+    D1[("D1: Customer")]
+    D2[("D2: Vehicle")]
+    D3[("D3: Appointment")]
+    D4[("D4: Service_Record")]
+    D5[("D5: Bill")]
+
+    %% === Staff to Processes ===
+    Staff -- "Customer Details" --> P1
+    Staff -- "Vehicle Info" --> P2
+    Staff -- "Appointment Data" --> P3
+    Staff -- "Service Details" --> P4
+    Staff -- "Payment Info" --> P5
+
+    %% === Customer to Processes ===
+    Customer -- "Appointment Request" --> P3
+    Customer -- "Cancellation Request" --> P3
+    Customer -- "History Query" --> P6
+
+    %% === Management to Processes ===
+    Management -- "Report Requests" --> P6
+
+    %% === Processes to External Entities ===
+    P1 -- "Customer Confirmation" --> Staff
+    P3 -- "Appointment Status" --> Staff
+    P3 -- "Appointment Status" --> Customer
+    P4 -- "Service Record" --> Staff
+    P5 -- "Bill / Invoice" --> Staff
+    P5 -- "Bill / Invoice" --> Customer
+    P6 -- "Service History" --> Customer
+    P6 -- "Analysis Reports" --> Management
+    P6 -- "Reports" --> Staff
+
+    %% === Processes to Data Stores ===
+    P1 -- "Store Customer" --> D1
+    P2 -- "Store Vehicle" --> D2
+    P3 -- "Store Appointment" --> D3
+    P4 -- "Store Service Record" --> D4
+    P5 -- "Store Bill" --> D5
+
+    %% === Data Stores to Processes ===
+    D1 -- "Customer Data" --> P2
+    D1 -- "Customer Data" --> P3
+    D1 -- "Customer Data" --> P6
+    D2 -- "Vehicle Data" --> P3
+    D2 -- "Vehicle Data" --> P4
+    D2 -- "Vehicle Data" --> P6
+    D3 -- "Appointment Data" --> P4
+    D3 -- "Appointment Data" --> P6
+    D4 -- "Service Data" --> P5
+    D4 -- "Service Data" --> P6
+    D5 -- "Bill Data" --> P6
+
+    %% === Inter-process flows ===
+    P1 -. "Customer ID" .-> P2
+    P2 -. "Vehicle ID" .-> P3
+    P3 -. "Appointment ID" .-> P4
+    P4 -. "Service ID & Cost" .-> P5
+
+    %% Styling
+    style Staff fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style Customer fill:#7B68EE,stroke:#5A4DB0,color:#fff
+    style Management fill:#FF8C42,stroke:#CC6B30,color:#fff
+    style P1 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style P2 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style P3 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style P4 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style P5 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style P6 fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
+    style D1 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style D2 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style D3 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style D4 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style D5 fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+        </pre>
+    </div>
+    <div id="tab-5" class="diagram-container">
+        <div class="diagram-title">Activity Diagram</div>
+        <pre class="mermaid">
+flowchart TD
+    Start(["▶ Start"])
+    CheckCust{"New or Existing\nCustomer?"}
+    RegCust["Register New Customer\n(name, phone, email, address)"]
+    SearchCust["Search Existing Customer\n(by ID or name)"]
+    CustFound{"Customer\nFound?"}
+    CustReady["Customer Record Ready"]
+
+    CheckVeh{"Vehicle Already\nRegistered?"}
+    AddVeh["Add New Vehicle\n(reg. no, brand, model, type, year)"]
+    SelectVeh["Select Existing Vehicle"]
+    VehReady["Vehicle Record Ready"]
+
+    BookAppt["Book Appointment\n(date, issue description)"]
+    ApptConfirm["Appointment Confirmed\n(status: BOOKED)"]
+
+    PerformService["Perform Vehicle Service"]
+
+    %% Fork for parallel activities
+    ForkNode["══ Fork ══"]
+    RecordDetails["Record Service Details\n(description, parts used)"]
+    CalcLabor["Calculate Labor Cost"]
+    CalcParts["Calculate Parts Cost"]
+    JoinNode["══ Join ══"]
+
+    CalcTotal["Calculate Total Cost\n(total = labor + parts)"]
+    SetNextService["Set Next Service Date"]
+    UpdateStatus["Update Appointment Status\n(status: COMPLETED)"]
+
+    GenBill["Generate Bill\n(amount = total cost)"]
+    PaymentCheck{"Payment\nReceived?"}
+    MarkPaid["Mark Bill as PAID\n(record payment method)"]
+    MarkPending["Bill Status: PENDING"]
+    GenReport["Generate Service Report"]
+
+    End(["⏹ End"])
+
+    %% Main Flow
+    Start --> CheckCust
+
+    CheckCust -- "New" --> RegCust
+    CheckCust -- "Existing" --> SearchCust
+
+    RegCust --> CustReady
+    SearchCust --> CustFound
+    CustFound -- "Yes" --> CustReady
+    CustFound -- "No" --> RegCust
+
+    CustReady --> CheckVeh
+
+    CheckVeh -- "No" --> AddVeh
+    CheckVeh -- "Yes" --> SelectVeh
+    AddVeh --> VehReady
+    SelectVeh --> VehReady
+
+    VehReady --> BookAppt
+    BookAppt --> ApptConfirm
+    ApptConfirm --> PerformService
+
+    PerformService --> ForkNode
+
+    %% Parallel Activities
+    ForkNode --> RecordDetails
+    ForkNode --> CalcLabor
+    ForkNode --> CalcParts
+
+    RecordDetails --> JoinNode
+    CalcLabor --> JoinNode
+    CalcParts --> JoinNode
+
+    JoinNode --> CalcTotal
+    CalcTotal --> SetNextService
+    SetNextService --> UpdateStatus
+
+    UpdateStatus --> GenBill
+
+    GenBill --> PaymentCheck
+    PaymentCheck -- "Yes" --> MarkPaid
+    PaymentCheck -- "No" --> MarkPending
+
+    MarkPaid --> GenReport
+    MarkPending --> GenReport
+
+    GenReport --> End
+
+    %% Styling
+    style Start fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style End fill:#F44336,stroke:#C62828,color:#fff
+    style CheckCust fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style CustFound fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style CheckVeh fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style PaymentCheck fill:#FFF9C4,stroke:#F9A825,stroke-width:2px
+    style ForkNode fill:#90A4AE,stroke:#546E7A,color:#fff,stroke-width:2px
+    style JoinNode fill:#90A4AE,stroke:#546E7A,color:#fff,stroke-width:2px
+    style RegCust fill:#E3F2FD,stroke:#1565C0
+    style SearchCust fill:#E3F2FD,stroke:#1565C0
+    style CustReady fill:#C8E6C9,stroke:#2E7D32
+    style AddVeh fill:#E8F5E9,stroke:#43A047
+    style SelectVeh fill:#E8F5E9,stroke:#43A047
+    style VehReady fill:#C8E6C9,stroke:#2E7D32
+    style BookAppt fill:#E1BEE7,stroke:#6A1B9A
+    style ApptConfirm fill:#E1BEE7,stroke:#6A1B9A
+    style PerformService fill:#FFCCBC,stroke:#BF360C
+    style RecordDetails fill:#FFCCBC,stroke:#BF360C
+    style CalcLabor fill:#FFE0B2,stroke:#E65100
+    style CalcParts fill:#FFE0B2,stroke:#E65100
+    style CalcTotal fill:#FFE0B2,stroke:#E65100
+    style SetNextService fill:#B2DFDB,stroke:#00695C
+    style UpdateStatus fill:#B2DFDB,stroke:#00695C
+    style GenBill fill:#F3E5F5,stroke:#8E24AA
+    style MarkPaid fill:#C8E6C9,stroke:#2E7D32
+    style MarkPending fill:#FFCDD2,stroke:#C62828
+    style GenReport fill:#BBDEFB,stroke:#1565C0
+        </pre>
+    </div>
+    <div id="tab-6" class="diagram-container">
+        <div class="diagram-title">Sequence Diagram</div>
+        <pre class="mermaid">
+sequenceDiagram
+    actor Staff
+    participant UI as System<br/>(Console UI)
+    participant CM as CustomerModule
+    participant VM as VehicleModule
+    participant AM as AppointmentModule
+    participant SM as ServiceModule
+    participant BM as BillingModule
+    participant DB as Database<br/>(MySQL)
+
+    Note over Staff, DB: === Phase 1: Customer Registration ===
+
+    Staff ->> UI: Select "Customer Management"
+    UI ->> Staff: Display Customer Sub-Menu
+
+    alt New Customer
+        Staff ->> UI: Select "Add Customer"
+        UI ->> Staff: Prompt for customer details
+        Staff ->> UI: Enter name, phone, email, address
+        UI ->> CM: addCustomer(details)
+        CM ->> DB: INSERT INTO Customer VALUES(...)
+        DB -->> CM: customer_id (auto-generated)
+        CM -->> UI: Customer registered (ID: xxx)
+        UI -->> Staff: Display confirmation
+    else Existing Customer
+        Staff ->> UI: Select "Search Customer"
+        Staff ->> UI: Enter customer ID
+        UI ->> CM: searchCustomer(id)
+        CM ->> DB: SELECT * FROM Customer WHERE customer_id = ?
+        DB -->> CM: Customer record
+        CM -->> UI: Customer data
+        UI -->> Staff: Display customer details
+    end
+
+    Note over Staff, DB: === Phase 2: Vehicle Registration ===
+
+    Staff ->> UI: Select "Vehicle Management"
+    UI ->> Staff: Display Vehicle Sub-Menu
+    Staff ->> UI: Select "Add Vehicle"
+    UI ->> Staff: Prompt for vehicle details
+    Staff ->> UI: Enter reg. no, brand, model, type, year
+    UI ->> VM: addVehicle(customerId, details)
+    VM ->> DB: INSERT INTO Vehicle VALUES(...)
+    DB -->> VM: vehicle_id (auto-generated)
+    VM -->> UI: Vehicle registered (ID: xxx)
+    UI -->> Staff: Display confirmation
+
+    Note over Staff, DB: === Phase 3: Appointment Scheduling ===
+
+    Staff ->> UI: Select "Appointment Management"
+    UI ->> Staff: Display Appointment Sub-Menu
+    Staff ->> UI: Select "Book Appointment"
+    UI ->> Staff: Prompt for appointment details
+    Staff ->> UI: Enter date, issue description
+    UI ->> AM: bookAppointment(custId, vehId, date, issue)
+    AM ->> DB: INSERT INTO Appointment VALUES(..., status='BOOKED')
+    DB -->> AM: appointment_id (auto-generated)
+    AM -->> UI: Appointment booked (ID: xxx)
+    UI -->> Staff: Display booking confirmation
+
+    Note over Staff, DB: === Phase 4: Service Recording ===
+
+    Staff ->> UI: Select "Service Record Management"
+    UI ->> Staff: Display Service Sub-Menu
+    Staff ->> UI: Select "Add Service Record"
+    UI ->> Staff: Prompt for service details
+    Staff ->> UI: Enter description, labor cost, parts cost
+
+    UI ->> SM: createRecord(apptId, vehId, desc, laborCost, partsCost)
+    SM ->> SM: calculateTotal(laborCost, partsCost)
+    Note right of SM: totalCost = laborCost + partsCost
+    SM ->> DB: INSERT INTO Service_Record VALUES(...)
+    DB -->> SM: service_id (auto-generated)
+
+    SM ->> AM: updateStatus(apptId, "COMPLETED")
+    AM ->> DB: UPDATE Appointment SET status='COMPLETED' WHERE appointment_id = ?
+    DB -->> AM: Updated successfully
+    AM -->> SM: Status updated
+
+    SM -->> UI: Service recorded (ID: xxx, Total: ₹xxxx)
+    UI -->> Staff: Display service record summary
+
+    Note over Staff, DB: === Phase 5: Bill Generation ===
+
+    Staff ->> UI: Select "Billing Management"
+    UI ->> Staff: Display Billing Sub-Menu
+    Staff ->> UI: Select "Generate Bill"
+    UI ->> Staff: Prompt for service ID
+
+    UI ->> BM: generateBill(serviceId)
+    BM ->> DB: SELECT total_cost FROM Service_Record WHERE service_id = ?
+    DB -->> BM: total_cost value
+    BM ->> DB: INSERT INTO Bill VALUES(..., status='PENDING')
+    DB -->> BM: bill_id (auto-generated)
+    BM -->> UI: Bill generated (ID: xxx, Amount: ₹xxxx)
+    UI -->> Staff: Display bill details
+
+    opt Payment Received
+        Staff ->> UI: Select "Mark Payment"
+        Staff ->> UI: Enter bill ID, payment method
+        UI ->> BM: markPaid(billId, paymentMethod)
+        BM ->> DB: UPDATE Bill SET payment_status='PAID', payment_method=? WHERE bill_id=?
+        DB -->> BM: Updated successfully
+        BM -->> UI: Payment recorded
+        UI -->> Staff: Display payment confirmation
+    end
+
+    Note over Staff, DB: === Phase 6: Reports (Optional) ===
+
+    opt View Reports
+        Staff ->> UI: Select "Reports"
+        UI ->> Staff: Display Reports Sub-Menu
+        Staff ->> UI: Select report type
+
+        UI ->> SM: getHistory(vehicleId)
+        SM ->> DB: SELECT * FROM Service_Record WHERE vehicle_id = ? ORDER BY service_date
+        DB -->> SM: Service history records
+        SM -->> UI: Formatted service history
+        UI -->> Staff: Display report
+    end
+        </pre>
+    </div>
+
+    <script>
+        function showTab(idx) {
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === idx);
+            });
+            document.querySelectorAll('.diagram-container').forEach((cont, i) => {
+                cont.classList.toggle('active', i === idx);
+            });
+        }
+    </script>
+</body>
+</html>
